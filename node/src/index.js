@@ -1,22 +1,20 @@
 const dotenv = require('dotenv');
+const app = require('./app.js');
+const { sequelize } = require('./models/index.js');
 
 dotenv.config();
 
-const app = require('./app.js');
-
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 
-const db = require('./models');
-
-db.sequelize
-    .authenticate()
+sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.');
+
         app.listen(port, host, () => {
             console.log(`Server is running on http://${host}:${port}`);
         });
     })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err);
+    .catch(error => {
+        console.error('Unable to connect to the database:', error);
     });

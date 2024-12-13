@@ -1,0 +1,117 @@
+erDiagram
+    User ||--o{ RepMax : has
+    User ||--o{ Routine : creates
+    User ||--o{ Session : performs
+    User ||--o{ Progress : tracks
+
+    Exercise ||--o{ RepMax : "tracked in"
+    Exercise ||--o{ Training : "used in"
+    Exercise ||--o{ Progress : "measured in"
+
+    Routine ||--|{ Training : contains
+    Routine ||--o{ Session : "executed in"
+
+    Training ||--|{ Set : contains
+    Training ||--o| Training : "superset with"
+    Training }|--|| Exercise : "uses"
+
+    Session ||--o{ Progress : records
+    Session }|--|| Routine : "follows"
+    Session }|--|| User : "performed by"
+
+    User {
+        int id PK
+        string email
+        string password
+        string name
+        enum role
+        enum preferred_measurement
+        enum experience_level
+    }
+
+    Exercise {
+        int id PK
+        string name
+        text description
+        string exercise_type
+        string main_muscle_group
+        string required_equipment
+        string tutorial_url
+        text technical_instructions
+        enum measurement_type
+        boolean is_rm_exercise
+    }
+
+    RepMax {
+        int id PK
+        int user_id FK
+        int exercise_id FK
+        float rm_value
+        string calculation_method
+        float weight_used
+        int reps_performed
+    }
+
+    Routine {
+        int id PK
+        string name
+        text description
+        int creator_id FK
+        enum type
+        enum difficulty
+        int estimated_time
+        string mesocycle_type
+        string microcycle_type
+        text warmup_description
+        boolean is_template
+        boolean active
+    }
+
+    Training {
+        int id PK
+        int routine_id FK
+        int exercise_id FK
+        int order
+        enum training_type
+        string tempo
+        boolean unilateral
+        int superset_with FK
+    }
+
+    Set {
+        int id PK
+        int training_id FK
+        int order
+        enum type
+        string reps
+        enum weight_type
+        float weight_value
+        int rm_percentage
+        int borg_target
+        int rest_time
+        boolean completed
+    }
+
+    Session {
+        int id PK
+        int user_id FK
+        int routine_id FK
+        datetime start_time
+        datetime end_time
+        enum status
+        int overall_difficulty
+        int energy_level
+        int completed_exercises
+    }
+
+    Progress {
+        int id PK
+        int user_id FK
+        int exercise_id FK
+        int session_id FK
+        float weight_used
+        int reps_performed
+        int borg_rating
+        int technique_rating
+        text notes
+    }

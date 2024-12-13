@@ -1,11 +1,13 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
 
-const config = {
+dotenv.config();
+
+const dbConfig = {
     development: {
-        username: process.env.DB_USER || "root",
-        password: process.env.DB_PASS || null,
-        database: process.env.DB_NAME || "database_development",
-        host: process.env.DB_HOST || "127.0.0.1",
+        username: process.env.DB_USER || "postgres",
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME || "pesas_app",
+        host: process.env.DB_HOST || "localhost",
         port: process.env.DB_PORT || 5432,
         dialect: "postgres"
     },
@@ -18,13 +20,13 @@ const config = {
         dialect: "postgres"
     },
     production: {
-        username: process.env.DB_USER || "root",
-        password: process.env.DB_PASS || null,
-        database: process.env.DB_NAME || "database_production",
-        host: process.env.DB_HOST || "127.0.0.1",
+        username: process.env.DB_USER || "postgres",
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME || "pesas_app",
+        host: process.env.DB_HOST || "db",
         port: process.env.DB_PORT || 5432,
         dialect: "postgres"
     }
 }
 
-module.exports = config;
+module.exports = dbConfig;

@@ -1,8 +1,8 @@
-# Nombre del Proyecto
+# GymRoutine Manager
 
 ## Descripción
 
-Proyecto de template para aplicaciones web full-stack con React + Vite, Node.js y PostgreSQL. Incluye configuración de Docker Compose para orquestación de contenedores.
+Aplicación web para gestionar y personalizar rutinas de entrenamiento. Digitaliza rutinas en PDF y personaliza los pesos según el RM (Repetición Máxima) de cada usuario. Incluye seguimiento de progreso y adaptación automática de cargas.
 
 ## Tecnologías Utilizadas
 
@@ -11,116 +11,73 @@ Proyecto de template para aplicaciones web full-stack con React + Vite, Node.js 
 - Base de Datos: PostgreSQL
 - ORM: Sequelize
 - Contenedores: Docker
-- Servidor Web: Nginx
-- Orquestación de Contenedores: Docker Compose
+- OCR: Tesseract.js (para procesar PDFs)
+- Cálculos: mathjs (para fórmulas de RM)
 
 ## Estructura del Proyecto
 
-```any
+```bash
 proyecto/
 │
 ├── react/
 │   ├── src/
-│   ├── public/
-│   ├── ...
-│   ├── package.json
+│   │   ├── components/
+│   │   │   ├── Exercise/
+│   │   │   ├── Routine/
+│   │   │   └── Training/
+│   │   ├── pages/
+│   │   └── utils/
 │   └── Dockerfile
 │
 ├── node/
 │   ├── src/
-│   │   ├── config/
 │   │   ├── models/
-│   │   ├── routes/
-|   |   ├── controllers/
-|   |   ├── middleware/
-|   |   ├── migrations/
-|   |   ├── seeders/
-|   |   ├── util/
-|   |   ├── app.js
-│   │   └── index.js
-│   ├── package.json
-│   ├── entrypoint.sh
+│   │   │   ├── Exercise.js
+│   │   │   ├── Routine.js
+│   │   │   └── User.js
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   │   ├── pdfProcessor.js
+│   │   │   └── rmCalculator.js
+│   │   └── routes/
 │   └── Dockerfile
 │
-├── nginx/
-│   ├── Dockerfile
-│   └── nginx.conf
-│
-├── docker-compose.yml
-└── README.md
+└── docker-compose.yml
 ```
 
-## Requisitos Previos
-
-- Docker
-- Docker Compose
-
-## Configuración y Ejecución
-
-### 1. Clonar el Repositorio
-
-```bash
-git clone [URL_DEL_REPOSITORIO]
-cd [NOMBRE_DEL_DIRECTORIO]
-```
-
-### 2. Configuración de Variables de Entorno
-
-Crear un archivo `.env` en la raíz del proyecto y configurar las siguientes variables:
+## Variables de Entorno
 
 ```.env
-DB_NAME=db_name
-DB_USER=db_user
-DB_PASSWORD=db_password
-DB_HOST=db # Nombre del servicio de la base de datos en Docker Compose
+DB_NAME=gym_routine_db
+DB_USER=gym_user
+DB_PASSWORD=your_password
+OCR_API_KEY=your_key
 ```
 
-### 3. Iniciar la Aplicación
+## Características Principales
+
+- Procesamiento de rutinas en PDF
+- Cálculo automático de pesos según RM
+- Seguimiento de progreso
+- Personalización por usuario
+- Historial de entrenamientos
+
+## Desarrollo
+
+### Preparación Base de Datos
+
+```bash
+docker-compose exec backend npx sequelize-cli db:migrate
+docker-compose exec backend npx sequelize-cli db:seed:all
+```
+
+### Iniciar en Desarrollo
 
 ```bash
 docker-compose up --build -d
 ```
 
-### 4. Acceder a la Aplicación
+Acceso:
 
-- Frontend: <http://localhost:5173>
-- Backend API: <http://localhost:3000>
-- Aplicación completa a través de Nginx: <http://localhost:8000>
-
-## Desarrollo
-
-### Frontend
-
-El frontend está desarrollado con React y Vite. Para desarrollo local:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Backend
-
-El backend está desarrollado con Node.js y Express. Para desarrollo local:
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-## Base de Datos
-
-La base de datos PostgreSQL se inicializa automáticamente con Docker Compose. Para ejecutar migraciones:
-
-```bash
-docker-compose exec backend npx sequelize-cli db:migrate
-```
-
-## Pruebas
-
-[Instrucciones para ejecutar pruebas, si las hay]
-
-## Despliegue
-
-La aplicación está configurada para ser desplegada usando Docker Compose. Para un despliegue en producción, asegúrate de modificar las configuraciones de seguridad y optimización según sea necesario.
+- App: http://localhost:8000
+- API: http://localhost:3000

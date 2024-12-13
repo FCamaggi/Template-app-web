@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: pesas-app-nginx
+    ports:
+      - '8000:80'
+    depends_on:
+      - node
+      - react
+    networks:
+      - app-network
+
+  react:
+    build:
+      context: ./react
+      dockerfile: Dockerfile
+    container_name: pesas-app-frontend
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: pesas-app-backend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./node/data:/app/data
+    environment:
+      - NODE_ENV=production
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=db
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: pesas-app-db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -15,13 +15,21 @@
 /nginx/*.log
 /nginx/conf.d/*.conf
 
-# Docker
-Dockerfile
-docker-compose.yml
-
 # Data folder
 /data/
 
 # Miscellaneous
 .DS_Store
 *.swp
+
+# Estructura proyecto
+estructura_proyecto/
+analyze_project.py
+
+# envs
+
+*/.env
+*/.env.local
+*/.env.development
+*/.env.test
+*/.env.production
